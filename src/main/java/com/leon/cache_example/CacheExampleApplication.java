@@ -8,6 +8,7 @@ import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -33,7 +34,9 @@ public class CacheExampleApplication {
 
 }
 
-record Product(Long id, String name, String description) {
+//com o Redis, precisamos implementar a parte de serialização
+//para que ele possa compreender os dados que estão sendo armazenados
+record Product(Long id, String name, String description) implements Serializable {
 }
 
 @Service
@@ -49,6 +52,8 @@ class ProductService {
         }
     };
 
+    //assim, o cache não é muito escalável pelo fato de na maioria das vezes eu ter mais de uma
+    // instância da aplicação rodando, o que faz com que o cache não seja compartilhado entre as instâncias
     @Cacheable("products")
     public Product getById(Long id) {
         System.out.println("Buscando produto com id " + id);
