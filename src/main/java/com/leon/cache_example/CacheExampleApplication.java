@@ -3,6 +3,8 @@ package com.leon.cache_example;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 
@@ -10,6 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @SpringBootApplication
+@EnableCaching
 public class CacheExampleApplication {
 
     public static void main(String[] args) {
@@ -46,6 +49,7 @@ class ProductService {
         }
     };
 
+    @Cacheable("products")
     public Product getById(Long id) {
         System.out.println("Buscando produto com id " + id);
         simulateLatency();
